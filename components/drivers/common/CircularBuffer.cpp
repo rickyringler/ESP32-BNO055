@@ -9,28 +9,28 @@ CircularBuffer<T, Size>::CircularBuffer(size_t ElementSize, size_t MaximumElemen
 template<typename T, size_t Size>
 CircularBuffer<T, Size>::~CircularBuffer()
 {
-    delete this->MetaElements;
+    delete this->State;
 }
 
 template<typename T, size_t Size>
 bool CircularBuffer<T, Size>::InitializeElementMetaData(size_t ElementSize, size_t MaximumElements) noexcept
 {
-    this->MetaElements = new ElementMetaData;
-    this->MetaElements->ElementSize = &ElementSize;
-    this->MetaElements->MaximumElements = &MaximumElements;
+    this->State = new BufferState;
+    this->State->ElementSize = &ElementSize;
+    this->State->MaximumElements = &MaximumElements;
     return true;
 }
 
 template<typename T, size_t Size>
 inline const size_t* CircularBuffer<T, Size>::GetElementSize() const noexcept
 {
-    return this->MetaElements->GetElementSize();
+    return this->State->GetElementSize();
 }
 
 template<typename T, size_t Size>
 inline const size_t* CircularBuffer<T, Size>::GetMaximumElements() const noexcept
 {
-    return this->MetaElements->GetMaximumElements();
+    return this->State->GetMaximumElements();
 }
 
 template<typename T, size_t Size>

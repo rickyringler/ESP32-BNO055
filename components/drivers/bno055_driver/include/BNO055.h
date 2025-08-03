@@ -1,21 +1,14 @@
 #ifndef BNO055_DEVICE_DRIVER_H
 #define BNO055_DEVICE_DRIVER_H
 
-#include "../../interfaces/GyroscopeInterface.h"
-#include "../../../bus/include/I2C.h"
-#include "esp_log.h"
 #include <stdint.h>
 #include "driver/i2c.h"
-
-struct DeviceState
-{
-    uint8_t Bank = 0;
-    uint8_t Register[2] = {0, 0};
-    inline void UpdateBank(uint8_t Value) noexcept {Bank = Value;};
-    inline void UpdateRegister(uint8_t Value) noexcept {Register[0,1] = Value;};
-    [[nodiscard]] inline uint8_t GetBank() const noexcept {return Bank;};
-    [[nodiscard]] inline uint8_t GetRegister() const noexcept {return Register[0,1];};
-};
+#include "../../interfaces/GyroscopeInterface.h"
+#include "../../../bus/include/I2C.h"
+#include "../../common/DeviceState.h"
+#include "../../common/CircularBuffer.h"
+#include "../src/Banks.h"
+#include "../src/Registers.h"
 
 class BNO055 final : public GyroscopeInterface
 {
@@ -26,18 +19,21 @@ class BNO055 final : public GyroscopeInterface
 
     float GetRoll() noexcept;
 
+    static constexpr uint8_t ToU8(Banks Bank);
+    static constexpr uint8_t ToU8(Registers Register);
+
     private:
 
     I2C* I2CBus;
     DeviceState* State;
-    const uint8_t Address = 0x28;
-    const uint16_t TransactionDelay = 150 / portTICK_PERIOD_MS;
-    const float ScalingFactor = 16.0f;
+    const uint8_t Address;
+    const uint16_t TransactionDelay;
+    const float ScalingFactor;
 
-    bool Initialize(const uint8_t& Address, const uint16_t& Delay, const float& ScalingFactor) noexcept;
-    esp_err_t ReadRegister(uint8_t Register, uint8_t* Buffer, size_t BufferSize) override;
-    esp_err_t WriteRegister(uint8_t Register, uint8_t Value) override;
-    esp_err_t SwitchBank(uint8_t Bank) override;
+    bool Initialize() noexcept;
+    esp_err_t ReadRegister(Registers Register, uint8_t* Buffer, size_t BufferSize);
+    esp_err_t WriteRegister(Registers Register, uint8_t Value);
+    esp_err_t SwitchBank(Banks Bank);
 };
 
 #endif

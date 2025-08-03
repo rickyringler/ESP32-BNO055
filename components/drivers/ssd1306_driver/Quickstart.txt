@@ -1,0 +1,4 @@
+Datasheet : https://cdn-shop.adafruit.com/datasheets/SSD1306.pdf
+
+Monoframe bit-depth buffer
+Resolution : 164 x 64

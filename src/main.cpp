@@ -1,8 +1,7 @@
-#include "components/drivers/bno055_driver/include/BNO055.h"
-#include "utilities/PCH.h"
+#include "core/Controller.h"
 
 extern "C" int main(int argc, char** argv)
 {
-    BNO055 Gyroscope = BNO055();
+    void* Lean = new Controller();
     return 0;
 }

@@ -1,15 +1,9 @@
 #ifndef CIRCULAR_BUFFER_H
 #define CIRCULAR_BUFFER_h
 
-#include "../utilities/PCH.h"
+#include "../../../src/utilities/PCH.h"
+#include "BufferState.h"
 
-struct ElementMetaData
-{
-    size_t* ElementSize;
-    size_t* MaximumElements;
-    [[nodiscard]] inline const size_t* GetElementSize()     const {return this->ElementSize;};
-    [[nodiscard]] inline const size_t* GetMaximumElements() const {return this->MaximumElements;};
-};
 
 template<typename T, size_t Size>
 class CircularBuffer final
@@ -37,7 +31,7 @@ class CircularBuffer final
     void* Head = nullptr;
     void* Tail = nullptr;
     size_t* Elements = nullptr;
-    ElementMetaData* MetaElements = nullptr;
+    BufferState* State = nullptr;
 };
 
 #endif

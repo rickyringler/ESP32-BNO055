@@ -6,6 +6,7 @@ BNO055::BNO055(const uint8_t Address, const uint16_t Delay, const float ScalingF
     TransactionDelay(Delay),
     ScalingFactor(ScalingFactor)
 {
+    vTaskDelay(pdMS_TO_TICKS(700));
     Initialize();
 }
 
@@ -24,10 +25,11 @@ bool BNO055::Initialize() noexcept
 
 float BNO055::GetRoll() noexcept
 {
-    uint8_t* RawData = 0;
-    if (ReadRegister(Registers::GYR_DATA_X_MSB, RawData, 2) != ESP_OK) return 0.0f;
+    uint8_t RawData[2] = {0};
+    if (ReadRegister(Registers::GYR_DATA_X_LSB, RawData, sizeof(RawData)) != ESP_OK)
+        return 0.0f;
 
-    int16_t Value = (int16_t)(RawData[1]<<8 | RawData[0]);
+    int16_t Value = (RawData[1] << 8) | RawData[0];
     return Value / this->ScalingFactor;
 }
 
@@ -43,30 +45,30 @@ constexpr uint8_t BNO055::ToU8(Registers Register)
 
 esp_err_t BNO055::ReadRegister(Registers Register, uint8_t* Buffer, size_t BufferSize)
 {
-    uint8_t MyRegister = ToU8(Register);
+    const uint8_t MyRegister = ToU8(Register);
 
     State->UpdateRegister(MyRegister);
     return I2CBus->ReadBytes(Address, MyRegister, Buffer, BufferSize, TransactionDelay);
 }
 
-esp_err_t BNO055::WriteRegister(Registers Register, uint8_t Data)
+esp_err_t BNO055::WriteRegister(const Registers Register, uint8_t Data) const
 {
-    uint8_t MyRegister = ToU8(Register);
+    const uint8_t MyRegister = ToU8(Register);
 
-    uint8_t Packet[2] = {MyRegister, Data};
+    const uint8_t Packet[2] = {MyRegister, Data};
     State->UpdateRegister(MyRegister);
     return I2CBus->WriteBytes(this->Address, Packet, 2, TransactionDelay);
 }
 
-esp_err_t BNO055::SwitchBank(Banks Bank)
+esp_err_t BNO055::SwitchBank(const Banks Bank) const
 {
-    uint8_t MyBank = ToU8(Bank);
-    uint8_t MyRegister = ToU8(Registers::REG_BANK_SEL);
+    const uint8_t MyBank = ToU8(Bank);
+    constexpr uint8_t MyRegister = ToU8(Registers::REG_BANK_SEL);
 
     if (this->State->GetBank() == MyBank) return ESP_OK;
 
-    uint8_t Packet[2] = {MyRegister, MyBank};
-    esp_err_t Error = I2CBus->WriteBytes(Address, Packet, sizeof(Packet), TransactionDelay);
+    const uint8_t Packet[2] = {MyRegister, MyBank};
+    const esp_err_t Error = I2CBus->WriteBytes(Address, Packet, sizeof(Packet), TransactionDelay);
     if (Error == ESP_OK) State->UpdateBank(MyBank);
     return Error;
 }

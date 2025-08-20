@@ -1,12 +1,12 @@
 #ifndef SSD1306_H
 #define SSD1306_H
-
+/*
 #include <stdint.h>
 #include "driver/i2c.h"
 #include "../../interfaces/DisplayInterface.h"
 #include "../../../bus/include/I2C.h"
-#include "../../common/DeviceState.h"
-#include "../../common/FrameBuffer.h"
+#include "../../common/states/DeviceState.h"
+#include "../../common/buffers/FrameBuffer.h"
 #include "../src/Banks.h"
 #include "../src/Registers.h"
 
@@ -35,5 +35,5 @@ private:
     esp_err_t WriteRegister(uint8_t Register, uint8_t Value);
     esp_err_t SwitchBank(uint8_t Bank);
 };
-
+*/
 #endif

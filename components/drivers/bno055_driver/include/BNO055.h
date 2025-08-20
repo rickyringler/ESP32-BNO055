@@ -1,12 +1,11 @@
 #ifndef BNO055_DEVICE_DRIVER_H
 #define BNO055_DEVICE_DRIVER_H
 
-#include <stdint.h>
+#include <cstdint>
 #include "driver/i2c.h"
 #include "../../interfaces/GyroscopeInterface.h"
 #include "../../../bus/include/I2C.h"
-#include "../../common/DeviceState.h"
-#include "../../common/CircularBuffer.h"
+#include "../../common/states/DeviceState.h"
 #include "../src/Banks.h"
 #include "../src/Registers.h"
 
@@ -32,8 +31,8 @@ class BNO055 final : public GyroscopeInterface
 
     bool Initialize() noexcept;
     esp_err_t ReadRegister(Registers Register, uint8_t* Buffer, size_t BufferSize);
-    esp_err_t WriteRegister(Registers Register, uint8_t Value);
-    esp_err_t SwitchBank(Banks Bank);
+    esp_err_t WriteRegister(Registers Register, uint8_t Value) const;
+    esp_err_t SwitchBank(Banks Bank) const;
 };
 
 #endif

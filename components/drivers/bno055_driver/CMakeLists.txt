@@ -1,0 +1,9 @@
+idf_component_register(
+        SRCS
+        src/BNO055.cpp
+        INCLUDE_DIRS
+        include
+        REQUIRES
+        bus
+        driver
+)

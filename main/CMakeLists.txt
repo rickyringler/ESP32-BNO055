@@ -1,0 +1,11 @@
+idf_component_register(
+        SRCS
+        main.cpp
+        core/Controller.cpp
+        INCLUDE_DIRS
+        .
+        core
+        REQUIRES
+        bno055_driver
+        common
+)

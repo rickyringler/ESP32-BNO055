@@ -1,0 +1,11 @@
+idf_component_register(
+        SRCS
+        buffers/CircularBuffer.cpp
+        buffers/FrameBuffer.cpp
+        INCLUDE_DIRS
+        .
+        buffers
+        states
+        REQUIRES
+        bus
+)

@@ -7,8 +7,8 @@
 #define SDA_IO          23
 #define SCL_IO          22
 #define I2C_FREQ        100000
-#define I2C_HIGH        0x69
-#define I2C_LOW         0x68
+#define I2C_HIGH        0x28
+#define I2C_LOW         0x29
 
 class I2C final
 {
@@ -25,8 +25,9 @@ class I2C final
 
     const uint16_t TransactionDelay = 150 / portTICK_PERIOD_MS;
 
-    i2c_config_t* Config;
+    i2c_config_t* Config = nullptr;
     i2c_config_t* BuildI2CConfig() noexcept;
+    bool Scan() const;
 
 
 };

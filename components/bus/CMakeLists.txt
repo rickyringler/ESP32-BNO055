@@ -1,0 +1,11 @@
+idf_component_register(
+        SRCS
+        include/I2C.h
+        src/I2C.cpp
+        INCLUDE_DIRS
+        include
+        src
+        REQUIRES
+        bus
+        driver
+)
